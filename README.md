@@ -1,6 +1,12 @@
 # Wiki Search Engine
+Final Project for COSI 132 written by:
+- Kevin Wang
+- Anthony Liu
+- Geoffrey Kao
+- Christine Zhu
+
 ## Overview
-Parallel and distributed querying system over large Wikipedia Datasets
+Parallel and distributed querying system over large Wikipedia Datasets using:
 - Java Implmentation
 - Hadoop
 - Spark
