@@ -1,0 +1,30 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+
+# eclipse project file
+.settings/
+.classpath
+.project
+
+# Misc
+wiki_00.csv
+wiki_01.csv
+wiki_02.csv
