@@ -1,12 +1,12 @@
-#Wiki Search Engine
-##Overview
+# Wiki Search Engine
+## Overview
 Parallel and distributed querying system over large Wikipedia Datasets
 - Java Implmentation
 - Hadoop
 - Spark
 
-##Descrtiption
-##Inverted Index [Lab 2: Due March 2nd
+## Descrtiption
+## Inverted Index [Lab 2: Due March 2nd
 - Implement a simple inverted index using MapReduce.
 - For this, you can use the inverted index you build at Lab 2. You can pick any implementation from
 the group members.
@@ -32,7 +32,7 @@ as described above, returns the matching document id’s as well as text snippet
 showing where the query term appears in the document. Since the inverted index can be large, use a
 SPARK-based algorithm for your query program.
 
-###Web Interface (Due April 20th)
+## Web Interface (Due April 20th)
 - Design and implement a simple web-based GUI for your querying system which takes in the query and
 returns the result in a nicely-formatted form.
 
