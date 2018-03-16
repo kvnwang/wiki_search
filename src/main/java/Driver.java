@@ -8,19 +8,19 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 public class Driver {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		Path inp1 = new Path(args[0]);
-		Path inp2 = new Path(args[1]);
-		Path inp3 = new Path(args[2]);
-		Path out = new Path(args[3]);
+//		Path inp2 = new Path(args[1]);
+//		Path inp3 = new Path(args[2]);
+		
+		Path out = new Path(args[1]);
 		
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "name counter");
 		
 		job.setInputFormatClass(TextInputFormat.class);
 		TextInputFormat.addInputPath(job, inp1);
-		TextInputFormat.addInputPath(job, inp2);
-		TextInputFormat.addInputPath(job, inp3);
+//		TextInputFormat.addInputPath(job, inp2);
+//		TextInputFormat.addInputPath(job, inp3);
 
-		
 		job.setOutputFormatClass(TextOutputFormat.class);
 		TextOutputFormat.setOutputPath(job, out);
 		
@@ -32,5 +32,6 @@ public class Driver {
 		
 		job.setReducerClass(IndexReducer.class);
 		job.waitForCompletion(true);
+
 	}
 }

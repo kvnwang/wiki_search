@@ -13,7 +13,7 @@ public class IndexReducer extends Reducer<Text,Text,Text,Text> {
 		while (values.iterator().hasNext()) {
 			String s=values.iterator().next().toString();
 			if (s.isEmpty()) continue;
-			indices.add(values.iterator().next().toString());
+			indices.add(s);
         }
 		
         context.write(key, new Text(indices.toString()));
