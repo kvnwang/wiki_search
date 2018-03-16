@@ -15,7 +15,6 @@ public class IndexReducer extends Reducer<Text,Text,Text,Text> {
 			if (s.isEmpty()) continue;
 			indices.add(s);
         }
-		System.out.println(indices.toString());
 		
         context.write(key, new Text(indices.toString()));
         
