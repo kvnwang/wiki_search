@@ -23,18 +23,21 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, Text> {
 		StringTokenizer tokenizer=new StringTokenizer(words);
 		Text file=new Text(docId);
 		Set<String> stopWords = new HashSet<String>();
-
 		String fileLine = null;
 
 		// FileReader reads text files in the default encoding.
-		FileReader fileReader = new FileReader("stopwords.txt");
+		FileReader fileReader = new FileReader("stop-words-english1.txt");
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-		while((fileLine = bufferedReader.readLine()) != null) {
-			stopWords.add(fileLine);
-		}   
-
-		bufferedReader.close();         
+		addSet(stopWords, fileReader, bufferedReader);
+		fileReader = new FileReader("stop-words-english2.txt");
+		addSet(stopWords, fileReader, bufferedReader);
+		fileReader = new FileReader("stop-words-english3-google.txt");
+		addSet(stopWords, fileReader, bufferedReader);
+		fileReader = new FileReader("stop-words-english4.txt");
+		addSet(stopWords, fileReader, bufferedReader);
+		fileReader = new FileReader("stop-words-english5.txt");
+		addSet(stopWords, fileReader, bufferedReader);
+		bufferedReader.close();     
 		while(tokenizer.hasMoreTokens()) {
 			String word=tokenizer.nextToken();
 			if(word.isEmpty()) continue;
@@ -44,5 +47,12 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, Text> {
 			}
 		}
 
+	}
+	public void addSet(Set<String> stopWords, FileReader fileReader, BufferedReader bufferedReader) throws IOException {
+		String fileLine = null;
+		bufferedReader = new BufferedReader(fileReader);
+		while((fileLine = bufferedReader.readLine()) != null) {
+			stopWords.add(fileLine);
+		}   
 	}
 }
