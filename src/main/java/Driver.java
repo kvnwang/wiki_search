@@ -10,6 +10,7 @@ public class Driver {
 		Path inp1 = new Path(args[0]);
 		Path inp2 = new Path(args[1]);
 		Path inp3 = new Path(args[2]);
+		
 		Path out = new Path(args[3]);
 		
 		Configuration conf = new Configuration();
@@ -20,7 +21,6 @@ public class Driver {
 		TextInputFormat.addInputPath(job, inp2);
 		TextInputFormat.addInputPath(job, inp3);
 
-		
 		job.setOutputFormatClass(TextOutputFormat.class);
 		TextOutputFormat.setOutputPath(job, out);
 		
@@ -32,5 +32,6 @@ public class Driver {
 		
 		job.setReducerClass(IndexReducer.class);
 		job.waitForCompletion(true);
+
 	}
 }
