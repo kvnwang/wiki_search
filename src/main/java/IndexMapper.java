@@ -20,7 +20,7 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, Text> {
 
 
 
-	@Override	
+	@Override
 	protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 		String [] line=value.toString().split(",");
 		String content=line[3];
@@ -28,9 +28,7 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, Text> {
 		String words = content.toLowerCase().replaceAll("[^a-zA-Z ]", " ");
 		StringTokenizer tokenizer=new StringTokenizer(words);
 		Text file=new Text(docId);
-//		
-//		FileReader reads text files in the default encoding.
-	     
+   
 		while(tokenizer.hasMoreTokens()) {
 			String word=tokenizer.nextToken();
 			if(word.isEmpty()) continue;
@@ -43,5 +41,12 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, Text> {
 			}
 		}
 
+	}
+	public void addSet(Set<String> stopWords, FileReader fileReader, BufferedReader bufferedReader) throws IOException {
+		String fileLine = null;
+		bufferedReader = new BufferedReader(fileReader);
+		while((fileLine = bufferedReader.readLine()) != null) {
+			stopWords.add(fileLine);
+		}
 	}
 }
