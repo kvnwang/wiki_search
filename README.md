@@ -1,5 +1,5 @@
 # Wiki Search Engine
-
+# Group 3 (cs132g3) - Hadooplahoops 
 ## Overview
 Final Project for COSI 132: Parallel and distributed querying system over large Wikipedia Datasets
 ## Authors:
