@@ -1,5 +1,5 @@
 # Wiki Search Engine
-# Group 3 (cs132g3) - Hadooplahoops 
+# Group 3 (cs132g3) - Hadooplahoops
 ## Overview
 Final Project for COSI 132: Parallel and distributed querying system over large Wikipedia Datasets
 ## Authors:
@@ -21,7 +21,7 @@ Final Project for COSI 132: Parallel and distributed querying system over large 
 - For this, you can use the inverted index you build at Lab 2. You can pick any implementation from
 the group members.
 
-## [] March 16th: Inverted Index + Stop & Scrub Word Elimination
+## [x] March 16th: Inverted Index + Stop & Scrub Word Elimination
 - Write a MapReduce program to identify stop words in a given dataset. You can use the Word Count
 program that was presented in the lab tutorial. You will need to find a good threshold for word count
 frequency such that words appearing more than this threshold will be characterized as stop words.
