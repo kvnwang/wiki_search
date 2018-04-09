@@ -44,7 +44,6 @@ public class Searcher {
         	};
         	JavaPairRDD<String, String> selectedRows = pairs.filter(longWordFilter);
         	JavaRDD<String> finalResult = selectedRows.map(x -> x._2);
-        	
         	finalResult.foreach(data -> {
         		System.out.println(data);
         	}); 
