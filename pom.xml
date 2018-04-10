@@ -9,12 +9,12 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 				<servletapi.version>2.5</servletapi.version>
-		
+
 	</properties>
-		
-	
-	
-	
+
+
+
+
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -22,7 +22,7 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
    <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -38,16 +38,16 @@
         </exclusion>
     </exclusions>
 	</parent>
-    
+
 	<dependencies>
-	
+
 		<dependency>
     			<groupId>org.apache.hadoop</groupId>
     			<artifactId>hadoop-common</artifactId>
    			 <version>2.9.0</version>
     			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-mapreduce-client-app</artifactId>
@@ -68,15 +68,15 @@
    			<artifactId>lucene-analyzers</artifactId>
    			<version>3.6.0</version>
 		</dependency>
-		
+
 
 		<dependency>
     			<groupId>org.apache.spark</groupId>
     			<artifactId>spark-core_2.11</artifactId>
     			<version>2.2.0</version>
 		</dependency>
-		
-		
+
+
 
 		<dependency>
       		<groupId>com.fasterxml.jackson.core</groupId>
@@ -84,22 +84,22 @@
       		<version>2.9.0</version>
      		 <scope>compile</scope>
     		</dependency>
-    
+
     		<dependency>
     			<groupId>org.apache.spark</groupId>
    		 	<artifactId>spark-sql_2.11</artifactId>
     			<version>2.2.0</version>
 		</dependency>
-    
-    
-    
+
+
+
 
 		<dependency>
   			<groupId>org.apache.opennlp</groupId>
   			<artifactId>opennlp-tools</artifactId>
   			<version>1.8.4</version>
 		</dependency>
-		
+
 
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
@@ -115,13 +115,13 @@
         </exclusion>
     </exclusions>
 	</dependency>
-	
+
 	<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
-	
+
 	<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -132,8 +132,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
-		
-		
+
+
 	</dependencies>
 
   <build>
@@ -144,6 +144,6 @@
             </plugin>
         </plugins>
     </build>
-	
-	
+
+
 </project>

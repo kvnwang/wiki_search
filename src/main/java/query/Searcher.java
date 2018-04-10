@@ -23,6 +23,7 @@ public class Searcher {
 		String word="all";        
         SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
+        
         JavaRDD<String> file = sc.textFile("src/main/java/output/part-r-00000");
 
         PairFunction<String, String, String> keyData =
