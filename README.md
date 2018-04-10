@@ -13,13 +13,13 @@ Final Project for COSI 132: Parallel and distributed querying system over large 
 - MapReduce
 - Hadoop
 - Spark
+- Spring Boot
 
 
 ## Descrtiption
 ## [x] March 2nd: Inverted Index
 - Implement a simple inverted index using MapReduce.
-- For this, you can use the inverted index you build at Lab 2. You can pick any implementation from
-the group members.
+- For this, you can use the inverted index you build at Lab 2. You can pick any implementation from the group members.
 
 ## [x] March 16th: Inverted Index + Stop & Scrub Word Elimination
 - Write a MapReduce program to identify stop words in a given dataset. You can use the Word Count
