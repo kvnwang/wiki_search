@@ -32,17 +32,15 @@ the complete dataset) have you achieved in the size of your index after eliminat
 scrub words.
 - For this assignment, you will need to run your code on the full dataset on the cluster.
 
-## [] March 29th: Inverted Index + Stop & Scrub Words + Document Positions
+## [X] March 29th: Inverted Index + Stop & Scrub Words + Document Positions
 - Extend your inverted index program with stop and scrub word elimination into a full inverted index.
 It is up to you how to specify a word’s position in a document.
 
-## [] April 13th: Querying with Hadoop
+## [X] April 13th: Querying with Hadoop
 - Write a query program which, given a boolean combination of words (in conjunctive normal form)
-as described above, returns the matching document id’s as well as text snippets from each document
-showing where the query term appears in the document. Since the inverted index can be large, use a
-SPARK-based algorithm for your query program.
+as described above, returns the matching document id’s as well as text snippets from each document showing where the query term appears in the document. Since the inverted index can be large, use a SPARK-based algorithm for your query program.
 
-## [] April 20th:  Web Interface
+## [X] April 20th:  Web Interface
 - Design and implement a simple web-based GUI for your querying system which takes in the query and
 returns the result in a nicely-formatted form.
 
