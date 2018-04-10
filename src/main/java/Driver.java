@@ -1,9 +1,8 @@
-import java.io.IOException;
+import java.io.IOException; 
 
 import mapreduce.IndexMapper;
 import mapreduce.IndexReducer;
 import wordwrapper.WikiWord;
-import wordwrapper.WordComparator;
 import wordwrapper.WordPartition;
 
 import org.apache.hadoop.conf.Configuration;
@@ -42,7 +41,6 @@ public class Driver {
     job.setOutputValueClass(WikiWord.class);
 
     job.setPartitionerClass(WordPartition.class);
-//    job.setGroupingComparatorClass(WordComparator.class);
 
     job.waitForCompletion(true);
   }
