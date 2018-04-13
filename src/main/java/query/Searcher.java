@@ -24,12 +24,12 @@ public class Searcher {
         SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
         
-        JavaRDD<String> file = sc.textFile("src/main/java/output/part-r-00000");
-
+        JavaRDD<String> file = sc.textFile("output/part-r-00000");
+    
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {
         		public Tuple2<String, String> call(String x) {
-        			String [] row=x.split("\\[" , 2);
+        			String [] row=x.split("\\[" ,  2);
         			return new Tuple2(row[0], row[1]);
         		}
         	};
