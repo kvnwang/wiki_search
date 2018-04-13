@@ -32,7 +32,17 @@ public class Driver {
 
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(WikiWord.class);
+    
+    
 
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(Text.class);
+    
+    job.setMapOutputKeyClass(Text.class);
+    job.setMapOutputValueClass(WikiWord.class);
+    
+    
+    
     job.setPartitionerClass(WordPartition.class);
 
     job.waitForCompletion(true);

@@ -20,11 +20,18 @@ import scala.Tuple2;
 
 public class Searcher {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+		String hdfsFile=args[0];
+		if(hdfsFile==null) {
+			hdfsFile="";
+		}
+		
 		String word="all";        
-        SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
+        SparkConf conf = new SparkConf().setAppName("Boolean Search").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
-        
-        JavaRDD<String> file = sc.textFile("output/part-r-00000");
+       
+//        JavaRDD<String> file = sc.textFile("output");
+        JavaRDD<String> file = sc.textFile(hdfsFile+"/output");
+    
     
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {

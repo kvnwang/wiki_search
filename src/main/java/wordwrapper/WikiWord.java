@@ -73,5 +73,19 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	    result = result == 0 ? this.position.compareTo(o.position) : result;
 	    return result;
 	}
+	@Override
+	   public boolean equals(Object o)  {
+	     if (o instanceof WikiWord) {
+	    	 WikiWord other = (WikiWord) o;
+	       return word.equals(other);
+	     }
+	     return false;
+	   }
+	 
+	   @Override
+	   public int hashCode()
+	   {
+	     return word.hashCode();
+	   }
 	
 }
