@@ -1,4 +1,4 @@
-import java.io.IOException;  
+import java.io.IOException;
 
 import mapreduce.IndexMapper;
 import mapreduce.IndexReducer;
@@ -16,20 +16,20 @@ public class Driver {
   public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
     Path wiki = new Path(args[0]);
     Path out = new Path(args[1]);
-    
+
     Configuration conf = new Configuration();
     Job job = Job.getInstance(conf, "wiki");
 
     TextInputFormat.addInputPath(job, wiki);
     TextOutputFormat.setOutputPath(job, out);
 
-    
+
     job.setJarByClass(Driver.class);
     job.setMapperClass(IndexMapper.class);
     job.setReducerClass(IndexReducer.class);
-    
+
     job.setOutputFormatClass(TextOutputFormat.class);
-    
+
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(WikiWord.class);
 
