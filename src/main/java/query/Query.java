@@ -8,9 +8,10 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
+import org.springframework.stereotype.Service;
 
 import scala.Tuple2;
-
+@Service
 public class Query implements Serializable {
 	SparkConf conf;
 	JavaSparkContext sc;

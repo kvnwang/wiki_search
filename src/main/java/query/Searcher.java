@@ -12,7 +12,15 @@ import org.apache.spark.SparkConf;
 
 import org.apache.spark.api.java.function.PairFunction;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import scala.Tuple2;
 
 
@@ -30,17 +38,45 @@ public class Searcher {
 		System.out.println("Enter a term to also search on");
 		String word2=input.nextLine().trim();
 
-		process(word, filter, word2);
+		analyze(word, filter, word2);
         
 
        
 	}
+	
+	private String getFileName(String text) {
+		String value=""+text.toString().charAt(0)+text.toString().charAt(1);
+		int hash= value.hashCode() % 676;
+		return null;
+	}
+
+	
+	private static void analyze(String word, String filter, String word2) {
+		SparkConf conf = new SparkConf().setAppName("Boolean Search").setMaster("local[*]");
+        JavaSparkContext sc = new JavaSparkContext(conf);
+        JavaRDD<String> file = sc.textFile("output/part-r-00004").cache();
+        
+        file.filter(line -> {
+        		String key=new JsonParser().parse(line).getAsJsonObject().keySet().iterator().next();
+        		return key.contains(word);
+        	})
+        .foreach(filterLine -> {
+    			String key=new JsonParser().parse(filterLine).getAsJsonObject().keySet().iterator().next();
+    			JsonObject inner= new JsonParser().parse(filterLine).getAsJsonObject().getAsJsonObject(key);
+	        JsonArray urls=inner.getAsJsonArray("urls");
+	        JsonArray ids=inner.getAsJsonArray("ids");
+	        JsonArray pos=inner.getAsJsonArray("positions");
+	        JsonArray words=inner.getAsJsonArray("words");
+        });
+        
+        
+	}
+
 
 	private static void process(String word, String filter, String word2) {
 		SparkConf conf = new SparkConf().setAppName("Boolean Search").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
-       
-        JavaRDD<String> file = sc.textFile("output").cache();
+        JavaRDD<String> file = sc.textFile("output/part-r-00004").cache();
     
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {

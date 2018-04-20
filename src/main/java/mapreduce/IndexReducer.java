@@ -41,6 +41,7 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 		json.put("positions", positions);
 		json.put("urls", urls);
 		json.put("words", words);
+		
 		JSONObject res=new JSONObject();
 		res.put(key.toString(), json);
         context.write(new Text(res.toString()), null);

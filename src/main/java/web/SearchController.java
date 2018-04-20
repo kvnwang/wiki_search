@@ -5,6 +5,7 @@ package web;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,9 @@ import query.Query;
 
 @Controller
 public class SearchController {
-	
+	@Autowired
+	Query query=new Query();
+
     @GetMapping("/")
     public String home(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
 		model.addAttribute("name", name);
@@ -26,7 +29,6 @@ public class SearchController {
 
     @RequestMapping(value = "/search")
     public String Search(@RequestParam("term") String term, Model model) {
-    	Query query=new Query();
         model.addAttribute("results", term);
         List list=new ArrayList<String>();
         System.out.println(term);
