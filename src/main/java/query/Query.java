@@ -12,15 +12,18 @@ import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
 public class Query implements Serializable {
+	SparkConf conf;
+	JavaSparkContext sc;
+	JavaRDD<String> file;
 	public Query() {
+		conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
+         sc = new JavaSparkContext(conf);
+         file = sc.textFile("src/main/java/output/part-r-00000");
 	}
 	
 	public String search(String input) {
 		String word="all";        
-        SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
-        JavaSparkContext sc = new JavaSparkContext(conf);
-        JavaRDD<String> file = sc.textFile("src/main/java/output/part-r-00000");
-
+        
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {
         		public Tuple2<String, String> call(String x) {

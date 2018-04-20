@@ -23,6 +23,7 @@ public class InvertMapper extends Mapper< LongWritable, Text, Text, Text> {
 		String [] line=value.toString().split(",");
 		String content=line[3];
 		String docId=line[0];
+		String url=line[1];
 		String words = content.toLowerCase().replaceAll("[^a-zA-Z ]", " ");
 		StringTokenizer tokenizer=new StringTokenizer(words);
 		Text file=new Text(docId);

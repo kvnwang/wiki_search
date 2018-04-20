@@ -20,26 +20,20 @@ public class SearchController {
 	
     @GetMapping("/")
     public String home(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
-        model.addAttribute("name", name);
+		model.addAttribute("name", name);
         return "index";
     }
 
     @RequestMapping(value = "/search")
     public String Search(@RequestParam("term") String term, Model model) {
-    		Query query=new Query();
+    	Query query=new Query();
         model.addAttribute("results", term);
         List list=new ArrayList<String>();
-
+        System.out.println(term);
         if(term != null){
-            System.out.println();
-            System.out.println();
-            System.out.println("a");
-            System.out.println();
-            System.out.println();
             String result=query.search(term);
             model.addAttribute("term", term);  
             model.addAttribute("results", result);
-//            System.out.println(result);
         }
         System.out.println();
         System.out.println();

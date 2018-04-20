@@ -6,11 +6,14 @@ import wordwrapper.WikiWord;
 import wordwrapper.WordPartition;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
 
 public class Driver {
   public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -19,7 +22,8 @@ public class Driver {
 
     Configuration conf = new Configuration();
     Job job = Job.getInstance(conf, "wiki");
-
+    job.setNumReduceTasks(676);
+    
     TextInputFormat.addInputPath(job, wiki);
     TextOutputFormat.setOutputPath(job, out);
 
@@ -28,6 +32,8 @@ public class Driver {
     job.setMapperClass(IndexMapper.class);
     job.setReducerClass(IndexReducer.class);
 
+    
+    
     job.setOutputFormatClass(TextOutputFormat.class);
 
     job.setMapOutputKeyClass(Text.class);
@@ -36,15 +42,14 @@ public class Driver {
     
 
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(Text.class);
+    job.setOutputValueClass(NullWritable.class);
     
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(WikiWord.class);
     
-    
-    
+       
     job.setPartitionerClass(WordPartition.class);
-
     job.waitForCompletion(true);
   }
+
 }

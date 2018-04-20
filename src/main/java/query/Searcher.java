@@ -2,7 +2,6 @@ package query;
 
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import org.apache.spark.api.java.JavaSparkContext;
@@ -31,13 +30,17 @@ public class Searcher {
 		System.out.println("Enter a term to also search on");
 		String word2=input.nextLine().trim();
 
-		
-        SparkConf conf = new SparkConf().setAppName("Boolean Search").setMaster("local[*]");
+		process(word, filter, word2);
+        
+
+       
+	}
+
+	private static void process(String word, String filter, String word2) {
+		SparkConf conf = new SparkConf().setAppName("Boolean Search").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
        
-//        JavaRDD<String> file = sc.textFile("output");
-        JavaRDD<String> file = sc.textFile("output");
-    
+        JavaRDD<String> file = sc.textFile("output").cache();
     
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {
@@ -64,7 +67,6 @@ public class Searcher {
         		System.out.println(data);
         	});
         	finalResult.saveAsTextFile("spark_output");
-
-       
+        	
 	}
 }

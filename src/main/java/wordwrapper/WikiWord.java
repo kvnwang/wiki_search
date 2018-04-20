@@ -8,6 +8,8 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
+
+import net.minidev.json.JSONObject;
 /**
  * 
  * @author Kevin
@@ -16,21 +18,38 @@ import org.apache.hadoop.io.WritableComparable;
  */
 public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	private Text word;
+	private Text url;
+	private Text title;
+
 	private IntWritable id;
 	private IntWritable position;
+	JSONObject json=new JSONObject();
 	
-	public WikiWord(String word, int id, int position) {
+	public WikiWord(String word, int id, int position, String url, String title) {
 		this.word=new Text(word);
 		this.id=new IntWritable(id);
 		this.position=new IntWritable(position);
+		this.url=new Text(url);
+		this.title=new Text(title);
 	}
 
 	  public WikiWord() {
 	    this.word = new Text();
 	    this.id = new IntWritable();
 	    this.position = new IntWritable();
+	    this.url=new Text();
+		this.title=new Text();
+		
+	  }
+	  
+	  public Text getUrl() {
+		  return this.url;
 	  }
 	
+	 public Text getTitle() {
+		 return this.title;
+	 }
+
 	public IntWritable getId() {
 		return this.id;
 	}
@@ -48,7 +67,7 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	}
 	
 	public String toString() {
-		return "["+this.word +"." + this.id + "." + this.position + "]"; 
+		return "{"+this.word +"." + this.id + "." + this.position + '.'+ this.url+ "." + this.title +"}"; 
 	}
 	
 	
@@ -57,6 +76,8 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 		word.readFields(input);
 		id.readFields(input);
 	    position.readFields(input);
+	    url.readFields(input);
+	    title.readFields(input);
 		
 	}
 	@Override
@@ -64,7 +85,10 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 		word.write(ouput);
 		id.write(ouput);
 		position.write(ouput);
+	    url.write(ouput);
+	    title.write(ouput);
 	}
+
 	
 	@Override
 	public int compareTo(WikiWord o) {

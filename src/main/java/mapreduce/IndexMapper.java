@@ -24,6 +24,8 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 	protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 		String [] line=value.toString().split(",");
 		String docId=line[0];
+		String url=line[1];
+		String title=line[2];
 		String content=line[3];
 
 		String words = content.toLowerCase().replaceAll("[^a-z ]", " ");
@@ -36,7 +38,7 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 
 			if(stemWord.isEmpty() || stemWord.length()<3 || stopWords.contains(stemWord)) continue;
 			Text wordText = new Text(stemWord);
-			WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position);
+			WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position, url, title);
 			context.write(wordText, wiki);
 			position++;
 
