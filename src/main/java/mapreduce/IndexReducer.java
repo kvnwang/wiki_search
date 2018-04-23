@@ -1,7 +1,9 @@
 package mapreduce;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.hadoop.io.NullWritable;
@@ -16,35 +18,56 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 
 	@Override
 	  protected void reduce(Text key, Iterable<WikiWord> values, Context context)  throws IOException, InterruptedException {	
-		String keyString=key.toString();
-		Set<String> indices=new HashSet<String>(); 
-		JSONObject json=new JSONObject();
-		JSONArray ids=new JSONArray();
-		JSONArray positions=new JSONArray();
-		JSONArray urls=new JSONArray();
-		JSONArray words=new JSONArray();
 
+		String keyString=key.toString();
+		Set<String> indices=new HashSet<String>();
+		Map<String, JSONObject> map=new HashMap<String, JSONObject>();
+		JSONObject json=new JSONObject();
+	
 		while (values.iterator().hasNext()) {
 			WikiWord text=values.iterator().next();
 			String jsonString=text.toString();
 			String s=text.toString();
 			if (s.isEmpty()) continue;
-			indices.add(jsonString);
+			String word=text.getWord().toString();
+			String pos=text.getPosition().toString();
+			String id=text.getId().toString();
+			String url=text.getUrl().toString();
+
+
+
 			
-			ids.add(text.getId().toString());
-			positions.add(text.getPosition().toString());
-			urls.add(text.getUrl().toString());
-			words.add(text.getWord().toString());
-		
+			json.put("key", keyString);
+			json.put("id", id);
+			json.put("pos", pos);
+			json.put("url", url);
+			json.put("word", word);
+	        context.write(new Text(json.toString()), null);
+
         }
-		json.put("ids", ids);
-		json.put("positions", positions);
-		json.put("urls", urls);
-		json.put("words", words);
 		
-		JSONObject res=new JSONObject();
-		res.put(key.toString(), json);
-        context.write(new Text(res.toString()), null);
+
+//		while (values.iterator().hasNext()) {
+//			WikiWord text=values.iterator().next();
+//			String jsonString=text.toString();
+//			String s=text.toString();
+//			if (s.isEmpty()) continue;
+//			indices.add(jsonString);
+//			
+//			ids.add(text.getId().toString());
+//			positions.add(text.getPosition().toString());
+//			urls.add(text.getUrl().toString());
+//			words.add(text.getWord().toString());
+//		
+//        }
+//		json.put("ids", ids);
+//		json.put("positions", positions);
+//		json.put("urls", urls);
+//		json.put("words", words);
+//		
+//		JSONObject res=new JSONObject();
+//		res.put(key.toString(), json);
+//        context.write(new Text(json.toString()), null);
 
 	}
 }

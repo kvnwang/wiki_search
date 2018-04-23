@@ -2,28 +2,28 @@ package query;
 
 import java.io.Serializable;
 
+
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import scala.Tuple2;
+
 @Service
 public class Query implements Serializable {
-	SparkConf conf;
+	@Autowired
 	JavaSparkContext sc;
-	JavaRDD<String> file;
+
 	public Query() {
-		conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
-         sc = new JavaSparkContext(conf);
-         file = sc.textFile("src/main/java/output/part-r-00000");
 	}
 	
 	public String search(String input) {
 		String word="all";        
+		JavaRDD<String> file = sc.textFile("output/part-r-00000");
         
         PairFunction<String, String, String> keyData =
         		new PairFunction<String, String, String>() {

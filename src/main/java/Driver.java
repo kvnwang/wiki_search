@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.IOException; 
 
 import mapreduce.IndexMapper;
 import mapreduce.IndexReducer;
@@ -12,6 +12,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 
@@ -46,8 +47,8 @@ public class Driver {
     
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(WikiWord.class);
-    
-       
+//    job.setOutputFormatClass(SequenceFileOutputFormat.class);
+
     job.setPartitionerClass(WordPartition.class);
     job.waitForCompletion(true);
   }

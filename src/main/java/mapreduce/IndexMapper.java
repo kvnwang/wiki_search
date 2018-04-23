@@ -27,6 +27,7 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 		String url=line[1];
 		String title=line[2];
 		String content=line[3];
+		Set<String> wordIDSet=new HashSet<String>();
 
 		String words = content.toLowerCase().replaceAll("[^a-z ]", " ");
 		StringTokenizer tokenizer=new StringTokenizer(words);
@@ -38,8 +39,15 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 
 			if(stemWord.isEmpty() || stemWord.length()<3 || stopWords.contains(stemWord)) continue;
 			Text wordText = new Text(stemWord);
-			WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position, url, title);
-			context.write(wordText, wiki);
+			
+			//checks that we don't output more than for a given word, don't output multiple positions - only output first position.
+			String duplicateCheck=word+"-"+docId;
+			if(!wordIDSet.contains(duplicateCheck)) {
+				wordIDSet.add(duplicateCheck);
+				WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position, url, title);
+				context.write(wordText, wiki);				
+			}
+
 			position++;
 
 		}
