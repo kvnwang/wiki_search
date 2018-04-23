@@ -1,7 +1,10 @@
 package mapreduce;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -27,16 +30,39 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 		String url=line[1];
 		String title=line[2];
 		String content=line[3];
+
+		
+		//added by geoffrey
+		ArrayList<String> neighborsFrame = new ArrayList<String>();
+		Queue<WikiWord> bufferOfWords = new LinkedList<>();
+		int neighborLength = 8;
+		
 		Set<String> wordIDSet=new HashSet<String>();
 
 		String words = content.toLowerCase().replaceAll("[^a-z ]", " ");
 		StringTokenizer tokenizer=new StringTokenizer(words);
 
 		int position=0;
+		//geoffrey has changed
 		while(tokenizer.hasMoreTokens()) {
+			
 			String word=tokenizer.nextToken();
 			String stemWord=createStem(word);
-
+			
+			neighborsFrame.add(word);
+			//write a buffered word to the reducers
+			if (neighborsFrame.size() >= neighborLength) {
+				WikiWord temp =  bufferOfWords.poll();
+				//get neighbors
+				String neighbors = "";
+				for (int i = 0; i < neighborsFrame.size(); i++) {
+			            neighbors = neighbors + (neighborsFrame.get(i));
+			        }
+				temp.modifyNeighbors(neighbors);
+				context.write(temp.getWordText(), temp);
+				neighborsFrame.remove(0);
+			}
+			
 			if(stemWord.isEmpty() || stemWord.length()<3 || stopWords.contains(stemWord)) continue;
 			Text wordText = new Text(stemWord);
 			
@@ -44,14 +70,25 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 			String duplicateCheck=word+"-"+docId;
 			if(!wordIDSet.contains(duplicateCheck)) {
 				wordIDSet.add(duplicateCheck);
-				WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position, url, title);
-				context.write(wordText, wiki);				
+				WikiWord wiki=new WikiWord(stemWord, Integer.valueOf(docId), position, url, title, null, wordText);
+				//context.write(wordText, wiki);
+				bufferOfWords.add(wiki);
 			}
 
 			position++;
 
 		}
-
+		String neighbors = "";
+		for (int i = 0; i < neighborsFrame.size(); i++) {
+	            neighbors = neighbors + (neighborsFrame.get(i));
+	        }
+		//add the rest of the unwritten words
+		while (bufferOfWords.size() != 0) {
+			WikiWord temp =  bufferOfWords.poll();
+			temp.modifyNeighbors(neighbors);
+			context.write(temp.getWordText(), temp);
+			neighborsFrame.remove(0);
+		}
 	}
 /**
  *
