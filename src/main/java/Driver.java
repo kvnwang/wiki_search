@@ -41,7 +41,6 @@ public class Driver {
     job.setMapOutputValueClass(WikiWord.class);
     
     
-
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(NullWritable.class);
     
