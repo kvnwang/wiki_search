@@ -63,8 +63,11 @@ public class Searcher {
 
 		SparkSession spark = SparkSession
 			      .builder()
+			      .appName("Example Program")
+			      .master("local")
+
 			      .appName("Java Spark SQL basic example")
-			      .config(conf)
+			      .config("spark.executor.instances", "2")
 			      .getOrCreate();
 		return spark;
 	}
@@ -85,7 +88,6 @@ public class Searcher {
 	private static Dataset<Row> andNotOperation(SQLContext sqlContext, String and) {
 		String andFile=getFileNumber(and);
 		Dataset<Row> expanded= sqlContext.read().json(getFileNumber(and));
-	
 		 return expanded.select("id", "pos", "url", "word")
 				 .filter(expanded.col("word").equalTo(and))
 				 .withColumnRenamed("pos", "pos_1")
@@ -112,9 +114,12 @@ public class Searcher {
 		SparkSession spark=setUpSpark();
 
 		// reads the data
-		 SQLContext sqlContext = new org.apache.spark.sql.SQLContext(spark);
-
-		 Dataset<Row> andData = andNotOperation(sqlContext, and);
+		SQLContext sqlContext = new org.apache.spark.sql.SQLContext(spark);
+		System.out.println(getFileNumber(word));
+		Dataset<Row> expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or), getFileNumber(not), getFileNumber(and));
+		expanded.createOrReplaceTempView("Data");
+		expanded.show();
+		Dataset<Row> andData = andNotOperation(sqlContext, and);
 		 andData.show();
 		 Dataset<Row> wordOrNot = wordOrNotOperation(sqlContext, word, or, not);
 		 wordOrNot.show();

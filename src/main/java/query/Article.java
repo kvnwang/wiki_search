@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class Article implements Serializable {
 	private String url;
-	private String pos1, pos2; 
+	private String pos, pos1, pos2; 
 	private String id;
-	private String word1, word2;
+	private String word1, word2, word;
 	
 
 
@@ -16,6 +16,19 @@ public class Article implements Serializable {
 		this.url=url;
 		this.word1=word1;
 		this.word2=word2;
+	}
+	public Article(String id, String pos, String url, String words) {
+		this.id=id;
+		this.pos=pos;
+		this.url=url;
+		this.word=words;
+	}
+	public String getword() {
+		return word;
+	}
+	
+	public String getPos() {
+		return pos;
 	}
 	public String getUrl() {
 		return url;

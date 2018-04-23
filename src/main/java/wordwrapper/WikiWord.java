@@ -45,10 +45,7 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	  public Text getUrl() {
 		  return this.url;
 	  }
-	
-	 public Text getTitle() {
-		 return this.title;
-	 }
+
 
 	public IntWritable getId() {
 		return this.id;
@@ -62,8 +59,9 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 		return this.word;
 	}
 	
-	public Text getText() {
-		return this.getText();
+	
+	public Text getTitle() {
+		return this.title;
 	}
 	
 	public String toString() {
