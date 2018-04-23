@@ -20,17 +20,22 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	private Text word;
 	private Text url;
 	private Text title;
+	private Text neighbors;
+	private Text wordText;
 
 	private IntWritable id;
 	private IntWritable position;
 	JSONObject json=new JSONObject();
 	
-	public WikiWord(String word, int id, int position, String url, String title) {
+	public WikiWord(String word, int id, int position, String url, String title, String neighbors, Text wordText) {
 		this.word=new Text(word);
 		this.id=new IntWritable(id);
 		this.position=new IntWritable(position);
 		this.url=new Text(url);
 		this.title=new Text(title);
+		//added by geoffrey
+		this.neighbors = new Text(neighbors);
+		this.wordText = wordText;
 	}
 
 	  public WikiWord() {
@@ -39,6 +44,8 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	    this.position = new IntWritable();
 	    this.url=new Text();
 		this.title=new Text();
+		//added by geoffrye
+		this.neighbors = new Text();
 		
 	  }
 	  
@@ -64,6 +71,16 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	
 	public Text getText() {
 		return this.getText();
+	}
+	//added by geoffrey
+	public Text getNeighbors() {
+		return this.neighbors;
+	}
+	public void modifyNeighbors(String neighbors) {
+		this.neighbors = new Text(neighbors);
+	}
+	public Text getWordText() {
+		return this.wordText;
 	}
 	
 	public String toString() {
