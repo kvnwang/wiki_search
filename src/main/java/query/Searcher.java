@@ -82,34 +82,29 @@ public class Searcher {
 		  }
 		  return name;
 	}
-	private static Dataset<Row> andNotOperation(SQLContext sqlContext, String and, String not) {
+	private static Dataset<Row> andNotOperation(SQLContext sqlContext, String and) {
 		String andFile=getFileNumber(and);
-		String notFile=getFileNumber(not);
-		Dataset<Row> expanded;
-		if(andFile.equals(notFile)) {
-			 expanded = sqlContext.read().json(getFileNumber(and));
-		} else {
-			 expanded = sqlContext.read().json(getFileNumber(and), getFileNumber(not));
-		}		
+		Dataset<Row> expanded= sqlContext.read().json(getFileNumber(and));
+	
 		 return expanded.select("id", "pos", "url", "word")
-				 .filter(expanded.col("word").notEqual(not))
-				 .filter(expanded.col("word").equalTo(and));
+				 .filter(expanded.col("word").equalTo(and))
+				 .withColumnRenamed("pos", "pos_1")
+				 .withColumnRenamed("word", "word_1");
+
 	}
 	
-	private static Dataset<Row> wordOrOperation(SQLContext sqlContext, String word, String or) {
+	private static Dataset<Row> wordOrNotOperation(SQLContext sqlContext, String word, String or, String not) {
 		String wordFile=getFileNumber(word);
 		String orFile=getFileNumber(or);
-		Dataset<Row> expanded;
-		if(wordFile.equals(orFile)) {
-			 expanded = sqlContext.read().json(getFileNumber(word));
+		Dataset<Row> expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or), getFileNumber(not));
 
-		} else {
-			 expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or));
-
-		}
-		expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or));
 		return expanded.select("id", "pos", "url", "word")
-				 .filter(expanded.col("word").isin(word, or));
+				 .filter(expanded.col("word").isin(word, or))
+				 .filter(expanded.col("word").notEqual(not))
+		 .withColumnRenamed("pos", "pos_2")
+		 .withColumnRenamed("word", "word_2");
+
+
 	}
 	
 
@@ -119,29 +114,34 @@ public class Searcher {
 		// reads the data
 		 SQLContext sqlContext = new org.apache.spark.sql.SQLContext(spark);
 
-		 Dataset<Row> andNot = andNotOperation(sqlContext, and, not);
-		 andNot.show();
-		 Dataset<Row> wordOr = wordOrOperation(sqlContext, word, or);
-		 wordOr.show();
-		 System.out.println("WW");
-		 Dataset<Row> filtered=andNot.join(wordOr)
-				 .where(andNot.col("url").equalTo(wordOr.col(("url"))))
-				 .where(andNot.col("word").equalTo(wordOr.col(("word"))));
+		 Dataset<Row> andData = andNotOperation(sqlContext, and);
+		 andData.show();
+		 Dataset<Row> wordOrNot = wordOrNotOperation(sqlContext, word, or, not);
+		 wordOrNot.show();
+		 
+		 Dataset<Row> filtered=wordOrNot.join(andData).where(andData.col("url").equalTo(wordOrNot.col(("url"))));
 		 filtered.show();
 
 		 JavaRDD<Row> s=filtered.toJavaRDD();
 		 
 		 JavaRDD<Article> articles=s.map((line) -> {
 			 String id= line.getString(line.fieldIndex("id"));
-			 String pos= line.getString(line.fieldIndex("pos"));
+			 System.out.println(line.fieldIndex("id"));
+
+			 String pos1= line.getString(line.fieldIndex("pos_1"));
+			 String pos2= line.getString(line.fieldIndex("pos_2"));
+
 			 String url= line.getString(line.fieldIndex("url"));
-			 String words= line.getString(line.fieldIndex("word"));
-			 return  new Article(id, pos, url, words);
+			 String word1= line.getString(line.fieldIndex("word_1"));
+			 String word2= line.getString(line.fieldIndex("word_2"));
+
+			 return  new Article(id, pos1, pos2, url, word1, word2);
 		 });
 		 
 		 List<Article> result = articles.collect();
+		 System.out.println(result);
 
-		 System.out.println();
+
 		 
 //		 Dataset<Row> expanded = d.withColumn("id", org.apache.spark.sql.functions.explode(d.col("ids")))
 //				 				.withColumn("pos", org.apache.spark.sql.functions.explode(d.col("positions")))
