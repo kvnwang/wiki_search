@@ -95,15 +95,17 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 	    position.readFields(input);
 	    url.readFields(input);
 	    title.readFields(input);
+	    neighbors.readFields(input);
 		
 	}
 	@Override
-	public void write(DataOutput ouput) throws IOException {
-		word.write(ouput);
-		id.write(ouput);
-		position.write(ouput);
-	    url.write(ouput);
-	    title.write(ouput);
+	public void write(DataOutput ouptut) throws IOException {
+		word.write(ouptut);
+		id.write(ouptut);
+		position.write(ouptut);
+	    url.write(ouptut);
+	    title.write(ouptut);
+	    neighbors.write(ouptut);
 	}
 
 	

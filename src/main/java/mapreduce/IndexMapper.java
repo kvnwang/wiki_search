@@ -58,7 +58,6 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 				for (int i = 0; i < neighborsFrame.size(); i++) {
 			            neighbors = neighbors + " " + (neighborsFrame.get(i));
 			        }
-				//System.out.println(neighbors);
 				temp.modifyNeighbors(neighbors);
 				context.write(temp.getWordText(), temp);
 				neighborsFrame.remove(0);

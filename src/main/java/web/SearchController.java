@@ -2,7 +2,7 @@ package web;
 
 
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,6 @@ import query.Query;
 
 @Controller
 public class SearchController {
-	@Autowired
-	Query query;
 
     @GetMapping("/")
     public String home(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
@@ -31,6 +29,7 @@ public class SearchController {
     @RequestMapping(value = "/search")
     public String Search(@RequestParam("term") String term, Model model) {
         model.addAttribute("results", term);
+    	Query query= new Query();
         List list=new ArrayList<String>();
         System.out.println(term);
         if(term != null){

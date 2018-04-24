@@ -1,21 +1,17 @@
 package query;
 
-import java.io.Serializable;
+import java.io.Serializable; 
 
 
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import scala.Tuple2;
 
-@Service
 public class Query implements Serializable {
-	@Autowired
+
 	JavaSparkContext sc;
 
 	public Query() {

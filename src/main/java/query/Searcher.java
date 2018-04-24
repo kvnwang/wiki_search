@@ -65,7 +65,6 @@ public class Searcher {
 			      .builder()
 			      .appName("Example Program")
 			      .master("local")
-
 			      .appName("Java Spark SQL basic example")
 			      .config("spark.executor.instances", "2")
 			      .getOrCreate();
@@ -116,35 +115,41 @@ public class Searcher {
 		// reads the data
 		SQLContext sqlContext = new org.apache.spark.sql.SQLContext(spark);
 		System.out.println(getFileNumber(word));
-		Dataset<Row> expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or), getFileNumber(not), getFileNumber(and));
+		Dataset<Row> expanded = sqlContext.read()
+				.json(getFileNumber(word), getFileNumber(or), getFileNumber(not), getFileNumber(and))
+				.cache();
 		expanded.createOrReplaceTempView("Data");
+        Dataset<Row> resultsDB = expanded.repartition(400, expanded.col("word").asc());
+
+		Dataset<Row> filter=expanded.where(expanded.col("word").equalTo("bag"));
 		expanded.show();
-		Dataset<Row> andData = andNotOperation(sqlContext, and);
-		 andData.show();
-		 Dataset<Row> wordOrNot = wordOrNotOperation(sqlContext, word, or, not);
-		 wordOrNot.show();
-		 
-		 Dataset<Row> filtered=wordOrNot.join(andData).where(andData.col("url").equalTo(wordOrNot.col(("url"))));
-		 filtered.show();
-
-		 JavaRDD<Row> s=filtered.toJavaRDD();
-		 
-		 JavaRDD<Article> articles=s.map((line) -> {
-			 String id= line.getString(line.fieldIndex("id"));
-			 System.out.println(line.fieldIndex("id"));
-
-			 String pos1= line.getString(line.fieldIndex("pos_1"));
-			 String pos2= line.getString(line.fieldIndex("pos_2"));
-
-			 String url= line.getString(line.fieldIndex("url"));
-			 String word1= line.getString(line.fieldIndex("word_1"));
-			 String word2= line.getString(line.fieldIndex("word_2"));
-
-			 return  new Article(id, pos1, pos2, url, word1, word2);
-		 });
-		 
-		 List<Article> result = articles.collect();
-		 System.out.println(result);
+		
+//		Dataset<Row> andData = andNotOperation(sqlContext, and);
+//		 andData.show();
+//		 Dataset<Row> wordOrNot = wordOrNotOperation(sqlContext, word, or, not);
+//		 wordOrNot.show();
+//		 
+//		 Dataset<Row> filtered=wordOrNot.join(andData).where(andData.col("url").equalTo(wordOrNot.col(("url"))));
+//		 filtered.show();
+//
+//		 JavaRDD<Row> s=filtered.toJavaRDD();
+//		 
+//		 JavaRDD<Article> articles=s.map((line) -> {
+//			 String id= line.getString(line.fieldIndex("id"));
+//			 System.out.println(line.fieldIndex("id"));
+//
+//			 String pos1= line.getString(line.fieldIndex("pos_1"));
+//			 String pos2= line.getString(line.fieldIndex("pos_2"));
+//
+//			 String url= line.getString(line.fieldIndex("url"));
+//			 String word1= line.getString(line.fieldIndex("word_1"));
+//			 String word2= line.getString(line.fieldIndex("word_2"));
+//
+//			 return  new Article(id, pos1, pos2, url, word1, word2);
+//		 });
+//		 
+//		 List<Article> result = articles.collect();
+//		 System.out.println(result);
 
 
 		 
