@@ -18,7 +18,8 @@ public class Query implements Serializable {
 	}
 	
 	public String search(String input) {
-		String word="all";        
+		String word="all";   
+		
 		JavaRDD<String> file = sc.textFile("output/part-r-00000");
         
         PairFunction<String, String, String> keyData =

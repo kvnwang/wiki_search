@@ -7,7 +7,7 @@ public class Article implements Serializable {
 	private String pos, pos1, pos2; 
 	private String id;
 	private String word1, word2, word;
-	
+	private String neighbor;
 
 
 	public Article(String id, String pos1, String pos2, String url, String word1, String word2) {
@@ -22,6 +22,19 @@ public class Article implements Serializable {
 		this.pos=pos;
 		this.url=url;
 		this.word=words;
+	}
+	public Article(String word, String id, String pos, String url, String neighbor) {
+		System.out.println(word);
+		System.out.println(id);
+		System.out.println(pos);
+		System.out.println(url);
+		System.out.println(neighbor);
+
+		this.word=word;
+		this.id=id;
+		this.pos=pos;
+		this.url=url;
+		this.neighbor=neighbor;
 	}
 	public String getword() {
 		return word;
@@ -57,7 +70,7 @@ public class Article implements Serializable {
 	}
 	
 	public String toString() {
-		return "{"+id+pos1+pos2+url+word1+word2+'}';
+		return "{"+id+pos1+pos2+url+word+neighbor+'}';
 	}
 	
 	

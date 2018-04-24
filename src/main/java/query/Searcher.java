@@ -1,31 +1,23 @@
 package query;
 
 
-import java.beans.Encoder;
+import java.beans.Encoder; 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
-import org.eclipse.jetty.websocket.common.frames.DataFrame;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -47,28 +39,14 @@ public class Searcher {
 		Scanner input=new Scanner(System.in);		
 		System.out.println("Enter a term to search on");
 		String word=input.nextLine().trim();
-		System.out.println("Enter a term to also search on - OR");
-		String or=input.nextLine().trim();
-		System.out.println("Enter a term to not search and filter on - NOT");
-		String not=input.nextLine().trim();
-		System.out.println("Enter a term to not search and filter on - AND");
-		String and=input.nextLine().trim();
-		analyze(word, and, not, or);
+
+		analyze(word);
            
 	}
-	private static SparkSession setUpSpark() {
-		SparkConf conf = new SparkConf()
-				.setAppName("Simple Application")
-				.setMaster("local[*]");
-
-		SparkSession spark = SparkSession
-			      .builder()
-			      .appName("Example Program")
-			      .master("local")
-			      .appName("Java Spark SQL basic example")
-			      .config("spark.executor.instances", "2")
-			      .getOrCreate();
-		return spark;
+	private static JavaSparkContext setUpSpark() {
+		 SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
+	        JavaSparkContext sc = new JavaSparkContext(conf);
+	        return sc;
 	}
 	
 	private static String getFileNumber(String s) {
@@ -84,45 +62,90 @@ public class Searcher {
 		  }
 		  return name;
 	}
-	private static Dataset<Row> andNotOperation(SQLContext sqlContext, String and) {
-		String andFile=getFileNumber(and);
-		Dataset<Row> expanded= sqlContext.read().json(getFileNumber(and));
-		 return expanded.select("id", "pos", "url", "word")
-				 .filter(expanded.col("word").equalTo(and))
-				 .withColumnRenamed("pos", "pos_1")
-				 .withColumnRenamed("word", "word_1");
 
-	}
-	
-	private static Dataset<Row> wordOrNotOperation(SQLContext sqlContext, String word, String or, String not) {
-		String wordFile=getFileNumber(word);
-		String orFile=getFileNumber(or);
-		Dataset<Row> expanded = sqlContext.read().json(getFileNumber(word), getFileNumber(or), getFileNumber(not));
+	private static void analyze(String search) {
+		JavaSparkContext spark=setUpSpark();
+        JavaRDD<String> file = spark.textFile("output/part-r-00022");
+        JavaRDD<String> articleJDD=file.filter(line -> {
+    			JsonObject json=(JsonObject) new JsonParser().parse(line);
+    			String keyword=json.get("word").getAsString();
+    			return keyword.equals(search);       
+        });
+//        PairFunction<String, String, Article> keyData =
+//        		new PairFunction<String, String, Article>() {
+//					@Override
+//					public Tuple2<String, Article> call(String t) throws Exception {
+//						JsonObject json=(JsonObject) new JsonParser().parse(t);
+//			    			String keyword=json.get("word").getAsString();
+//			    			String url=json.get("url").getAsString();
+//			    			String id=json.get("id").getAsString();
+//			    			String pos=json.get("pos").getAsString();
+//			    			String neighbor=json.get("neighbor").getAsString();
+//			    			Article article=new Article(keyword, id, pos, url, neighbor);
+//		        			return new Tuple2(keyword, article);
+//					}
+//        	};
+        	Function<String, Article> mapFunction =
+            		new Function<String, Article>() {
+						@Override
+						public Article call(String s) throws Exception {
+							JsonObject json=(JsonObject) new JsonParser().parse(s);
+			    			String keyword=json.get("word").getAsString();
+			    			String url=json.get("url").getAsString();
+			    			String id=json.get("id").getAsString();
+			    			String pos=json.get("pos").getAsString();
+			    			String neighbor=json.get("neighbor").getAsString();
+			    			return new Article(keyword, id, pos, url, neighbor);
+						}			
+        };
+        	
+        List<Article> articles = articleJDD.map(mapFunction).collect();
+        System.out.println(articles);
+	        System.out.println();
+	        System.out.println();
+	        System.out.println();
+	        System.out.println();
+	        System.out.println();
+	        System.out.println();
+        	
 
-		return expanded.select("id", "pos", "url", "word")
-				 .filter(expanded.col("word").isin(word, or))
-				 .filter(expanded.col("word").notEqual(not))
-		 .withColumnRenamed("pos", "pos_2")
-		 .withColumnRenamed("word", "word_2");
+        
+//     
+//        
+//
+//			@Override
+//			public Tuple2<String, String> call(String x) {
+//    			String [] row=x.split("\\[" , 2);
+//    			return new Tuple2(row[0], row[1]);
+//    		}
+//
+//        });
+//        
+//        	JavaPairRDD<String, String> pairs = articles.mapToPair(keyData);
+//        	
+//        
 
+//        
+//        JavaPairRDD<String, Article> deviceRdd = articles.mapToPair(new PairFunction<String, Article>() {   
+//            public Tuple2<String, String> call(Article sensor) throws Exception {
+//                Tuple2<Integer, Article>  tuple = new Tuple2<Integer, Sensor>(Integer.parseInt(sensor.getsId().trim()), sensor);
+//                return tuple;
+//            }
+//        });
+        
+//        	JavaPairRDD<String, String> pairs = file.mapToPair(keyData);
+        	
+        
 
-	}
-	
+//        
+//        file.filter(line -> {
+//        		String key=new JsonParser().parse(line).getAsJsonObject().keySet().iterator().next();
+//        		return key.contains(word);
+//        	})
+//        .foreach(filterLine -> {
 
-	private static void analyze(String word, String and, String not, String or) {
-		SparkSession spark=setUpSpark();
-
-		// reads the data
-		SQLContext sqlContext = new org.apache.spark.sql.SQLContext(spark);
-		System.out.println(getFileNumber(word));
-		Dataset<Row> expanded = sqlContext.read()
-				.json(getFileNumber(word), getFileNumber(or), getFileNumber(not), getFileNumber(and))
-				.cache();
-		expanded.createOrReplaceTempView("Data");
-        Dataset<Row> resultsDB = expanded.repartition(400, expanded.col("word").asc());
-
-		Dataset<Row> filter=expanded.where(expanded.col("word").equalTo("bag"));
-		expanded.show();
+//        });
+//        
 		
 //		Dataset<Row> andData = andNotOperation(sqlContext, and);
 //		 andData.show();
