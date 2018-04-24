@@ -8,6 +8,7 @@ public class Article implements Serializable {
 	private String id;
 	private String word1, word2, word;
 	private String neighbor;
+	private String title;
 
 
 	public Article(String id, String pos1, String pos2, String url, String word1, String word2) {
@@ -35,6 +36,11 @@ public class Article implements Serializable {
 		this.pos=pos;
 		this.url=url;
 		this.neighbor=neighbor;
+	}
+	public Article(String neighbors, String url, String title) {
+		this.neighbor = neighbors;
+		this.url = url;
+		this.title = title;
 	}
 	public String getword() {
 		return word;
