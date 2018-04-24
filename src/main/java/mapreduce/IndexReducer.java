@@ -20,20 +20,17 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 	  protected void reduce(Text key, Iterable<WikiWord> values, Context context)  throws IOException, InterruptedException {	
 
 		String keyString=key.toString();
-		Set<String> indices=new HashSet<String>();
-		Map<String, JSONObject> map=new HashMap<String, JSONObject>();
 		JSONObject json=new JSONObject();
 	
 		while (values.iterator().hasNext()) {
 			WikiWord text=values.iterator().next();
-			String jsonString=text.toString();
 			String s=text.toString();
 			if (s.isEmpty()) continue;
 			String word=text.getWord().toString();
 			String pos=text.getPosition().toString();
 			String id=text.getId().toString();
 			String url=text.getUrl().toString();
-
+			String neighbor = text.getNeighbors().toString();
 
 
 			
@@ -42,6 +39,7 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 			json.put("pos", pos);
 			json.put("url", url);
 			json.put("word", word);
+			json.put("neighbor", neighbor);
 	        context.write(new Text(json.toString()), null);
 
         }

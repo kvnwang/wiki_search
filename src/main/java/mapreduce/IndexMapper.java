@@ -51,16 +51,20 @@ public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 			
 			neighborsFrame.add(word);
 			//write a buffered word to the reducers
-			if (neighborsFrame.size() >= neighborLength) {
+			if (neighborsFrame.size() >= neighborLength && bufferOfWords.peek()!=null) {
 				WikiWord temp =  bufferOfWords.poll();
 				//get neighbors
 				String neighbors = "";
 				for (int i = 0; i < neighborsFrame.size(); i++) {
-			            neighbors = neighbors + (neighborsFrame.get(i));
+			            neighbors = neighbors + " " + (neighborsFrame.get(i));
 			        }
+				//System.out.println(neighbors);
 				temp.modifyNeighbors(neighbors);
 				context.write(temp.getWordText(), temp);
 				neighborsFrame.remove(0);
+				while (neighborsFrame.size() > neighborLength) {
+					neighborsFrame.remove(0);
+				}
 			}
 			
 			if(stemWord.isEmpty() || stemWord.length()<3 || stopWords.contains(stemWord)) continue;

@@ -34,7 +34,9 @@ public class WikiWord  implements Writable, WritableComparable<WikiWord> {
 		this.url=new Text(url);
 		this.title=new Text(title);
 		//added by geoffrey
+		if (neighbors!=null) {
 		this.neighbors = new Text(neighbors);
+		}
 		this.wordText = wordText;
 	}
 
