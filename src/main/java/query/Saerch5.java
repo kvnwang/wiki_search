@@ -18,14 +18,13 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 
-import com.google.common.collect.Iterables;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 
 import scala.Tuple2;
 
-public class Searcher3 {
+public class Saerch5 {
 
 	public static HashSet<String> operatorTerms = new HashSet<String>();
 
@@ -43,18 +42,19 @@ public class Searcher3 {
 		Iterator<Tuple2<String, Article>> iter = saf.iterator();
 		ArrayList<Article> searches=new ArrayList<Article>();		
 		String output="";
-//		while(iter.hasNext()) {
-//			Article a=iter.next()._2();
-//			output+=a.toString();
-//			if(iter.hasNext()) {
-//				output+='\n';
-//			}
-//		}
+		while(iter.hasNext()) {
+			Article a=iter.next()._2();
+			output+=a.toString();
+			if(iter.hasNext()) {
+				output+='\n';
+			}
+		}
+	
+		System.out.println(output.trim());
 //    		List<Article> searchResults=finalResult.collect();
 //    		System.out.println(searchResults.get(0));
-		finalRDD.foreach(i->System.out.println(i._2()));
+//		finalRDD.foreach(i->System.out.println(i._2.getId()));
 	}
-	
 	private static ArrayList<String> fakeList() {
 		ArrayList<String> searchTermList=new ArrayList<String>();
 		searchTermList.add("cat");
@@ -144,7 +144,6 @@ public class Searcher3 {
 		for (String S : output) {
 			System.out.println(S);
 		}
-		
 		return output;
 	}
 
@@ -181,54 +180,69 @@ public class Searcher3 {
 	private static String getFiles(List<String> output) {
 		Set<String> files=new HashSet<String>();
 		for(String s: output) {	
-			if(!isOperand(s)) {
-				files.add(getFileNumber(s));				
-			}
+			files.add(getFileNumber(s));
 		}
 		return files.toString().replace("[", "").replace("]", "").replace(" ", "");
 	}
 	
-	public static <K, V> JavaPairRDD<K, V> intersectByKey(JavaPairRDD<K, V> rdd1, JavaPairRDD<K, V> rdd2) {
-	    JavaPairRDD<K, Tuple2<Iterable<V>, Iterable<V>>> grouped = rdd1.cogroup(rdd2);
-	    return grouped.flatMapValues(new Function<Tuple2<Iterable<V>, Iterable<V>>, Iterable<V>>() {
-	        @Override
-	        public Iterable<V> call(Tuple2<Iterable<V>, Iterable<V>> input) {
-	          ArrayList<V> al = new ArrayList<V>();
-	          if (!Iterables.isEmpty(input._1()) && !Iterables.isEmpty(input._2())) {
-	            Iterables.addAll(al, input._1());
-	            Iterables.addAll(al, input._2());
-	          }
-	          return al;
-	        }
-	     });
-	  }
 	
-	
-
+	private static JavaPairRDD<String, Article> applyAnd(JavaPairRDD<String, Article> articles, String left, String right) {
+		JavaPairRDD<String, Article> res= articles.filter( i-> i._2().getword().equals(left) && i._2().getword().equals(right)); 
+//		JavaRDD<Article> rdd=articles.map(i->i._2);
+//		rdd.filter(i->i.getword().equals(left));
+//		rdd.foreach(i->System.out.println(i));
+//		
+		
+		Function<Tuple2<String, Article>, Boolean> longWordFilter =
+      		  new Function<Tuple2<String, Article>, Boolean>() {
+      		    public Boolean call(Tuple2<String, Article> keyValue) 	{
+      		      return (keyValue._2().getword().equals(left));
+      		    }
+      	};
+      	articles.filter(longWordFilter);
+       	
+		return articles;
+	}
 	
 	private static JavaPairRDD<String, Article> createTokenRDD(JavaPairRDD<String, Article> articles, String term) {
 		Function<Tuple2<String, Article>, Boolean> longWordFilter =
 	      		  new Function<Tuple2<String, Article>, Boolean>() {
-	      		    /**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-				
-					public Boolean call(Tuple2<String, Article> keyValue) 	{
-						if(keyValue._2().getword().toString().equals(term)) {
-							return true;
-						} else {
-							return false;
-						}
+	      		    public Boolean call(Tuple2<String, Article> keyValue) 	{
+	      		      return (keyValue._2().getword().equals(term));
 	      		    }
 	      	};
-	      	JavaPairRDD<String, Article>  results= articles.filter(longWordFilter);
+	      	articles.filter(longWordFilter);
 	       	
-			return results;
+			return articles;
 	}
 
 	
+	private static JavaPairRDD<String, Article> applyOr(JavaPairRDD<String, Article> articles, String left, String right) {
+		Function<Tuple2<String, Article>, Boolean> longWordFilter =
+	      		  new Function<Tuple2<String, Article>, Boolean>() {
+	      		    public Boolean call(Tuple2<String, Article> keyValue) 	{
+	      		      return (keyValue._2().getword().equals(left));
+	      		    }
+	      	};
+	      	articles.filter(longWordFilter);
+	       	
+			return articles;
+//		return articles.filter( i-> (i._2.getword().equals(left) || i._2.getword().equals(right)));
+	}
+	
+	private static JavaPairRDD<String, Article> applyNot(JavaPairRDD<String, Article> articles, String left, String right) {
+		Function<Tuple2<String, Article>, Boolean> longWordFilter =
+	      		  new Function<Tuple2<String, Article>, Boolean>() {
+	      		    public Boolean call(Tuple2<String, Article> keyValue) 	{
+	      		      return (!keyValue._2().getword().equals(left) && !keyValue._2().getword().equals(right));
+	      		    }
+	      	};
+	      	articles.filter(longWordFilter);
+	      	
+	      	return articles;
+	      
+//		return articles.filter( i-> (i._2.getword().equals(left) && !i._2.getword().equals(right)));
+	}
 	
 	
 	// =========================================================================================
@@ -238,47 +252,57 @@ public class Searcher3 {
 	private static JavaPairRDD<String, Article> applyOperations(ArrayList<String> output) {
 		String files=getFiles(output);
 		JavaPairRDD<String, Article> articles= returnRDD(files);
+		Stack<String> operatorStack=new Stack<String>();
 		Stack<JavaPairRDD<String, Article>> JavaRDDStack=new Stack<JavaPairRDD<String, Article>>();
-		int size=output.size();
 		JavaPairRDD<String, Article> current;
+		String left="";
+		String right="";
+		int size=output.size();
 		
 		for(int i=0; i<size; i++) {	
 			String s=output.get(i);
-			if (isOperand(s)) {		
-				System.out.println(JavaRDDStack.size());
-				JavaPairRDD<String, Article> left =JavaRDDStack.pop();
-					System.out.println(left.count());
-					JavaPairRDD<String, Article> right =JavaRDDStack.pop();	
-					System.out.println(right.count());
-					System.out.println("ETNTINERIN");
-				if (s.equals("AND")) {
-					System.out.println(left.count());
-					System.out.println(right.count());
-					current=intersectByKey(left, right); 
-					JavaRDDStack.push(current);
-					System.out.println("AND");
-				
-				} else if (s.equals("OR"))  {
-					System.out.println("OROROR");
-					current=left.union(right);
-					JavaRDDStack.push(current);
-				} else if (s.equals("NOT")) {
-					System.out.println(JavaRDDStack.size());
-					current=left.subtractByKey(right);
-					JavaRDDStack.push(current);
+			if (isOperand(s)) {				
+				if(operatorStack.size()!=0) {
+					left=operatorStack.pop();
+					right=operatorStack.pop();	
 				}
-				if(size-1==i) {
-					System.out.println("should enter");
-					return JavaRDDStack.pop();
+				
+				if (s.equals("AND")) {
+					current=applyAnd(articles, left, right);
+
+					if(!JavaRDDStack.empty() && i==size-1) {
+						JavaPairRDD<String, Article> last= JavaRDDStack.pop();
+						return last.intersection(current);
+					} else {
+
+						JavaRDDStack.push(current);
+					}
+					
+				} else if (s.equals("OR"))  {
+
+					current=applyOr(articles, left, right);
+					if(!JavaRDDStack.empty() && i==size-1) {
+						JavaPairRDD<String, Article> last= JavaRDDStack.pop();
+						return last.union(current);
+					} else {
+						JavaRDDStack.push(current);
+					}
+				} else if (s.equals("NOT")) {
+					
+					current=applyNot(articles, left, right);
+					if(!JavaRDDStack.empty() && i==size-1) {
+						JavaPairRDD<String, Article> last= JavaRDDStack.pop();
+
+						return last.subtract(current);
+
+					} else {
+						JavaRDDStack.push(current);
+					}
 				}
 			} else {
 				 JavaPairRDD<String, Article> curr=createTokenRDD(articles, s);
 				 JavaRDDStack.push(curr);
-				 if(size-1==i) {
-					 System.out.println("shoudl not enter");
-					return JavaRDDStack.pop();
-				}
-				 System.out.println(JavaRDDStack.size());
+				operatorStack.push(s);
 			}
 		}
 

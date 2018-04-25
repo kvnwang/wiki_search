@@ -160,10 +160,9 @@ public class Searcher4 {
 				String docID = json.get("id").getAsString();
 				String neighbors = json.get("neighbor").getAsString();
 				String url = json.get("url").getAsString();
-//				String title = json.get("title").getAsString();
-				String title=null;
+				String title = json.get("title").getAsString();
 				String word=json.get("word").getAsString();
-				Article output = new Article(word, docID, url, neighbors);
+				Article output = new Article(word, docID, url, neighbors, title);
 				Tuple2<String, Article> tuple = new Tuple2<String, Article>(docID, output);
 				return tuple;
 			}
@@ -175,7 +174,12 @@ public class Searcher4 {
 		return (s.equals("AND") || s.equals("OR") || s.equals("NOT"));
 	}
 	
-	
+
+/**
+ * 	
+ * @param output
+ * @return string version of all files needed to searh on
+ */
 	private static String getFiles(List<String> output) {
 		Set<String> files=new HashSet<String>();
 		for(String s: output) {	
@@ -184,14 +188,15 @@ public class Searcher4 {
 		return files.toString().replace("[", "").replace("]", "").replace(" ", "");
 	}
 	
+//	
+//	private static JavaPairRDD<String, Article> searchOperation(JavaPairRDD<String, Article> articles, String term) {
+//		
+//	}
+
 	
 	
 	private static JavaPairRDD<String, Article> applyAnd(JavaPairRDD<String, Article> articles, String left, String right) {
 		JavaPairRDD<String, Article> res= articles.filter( i-> i._2().getword().equals(left) && i._2().getword().equals(right)); 
-//		JavaRDD<Article> rdd=articles.map(i->i._2);
-//		rdd.filter(i->i.getword().equals(left));
-//		rdd.foreach(i->System.out.println(i));
-//		
 		
 		Function<Tuple2<String, Article>, Boolean> longWordFilter =
       		  new Function<Tuple2<String, Article>, Boolean>() {

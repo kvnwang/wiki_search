@@ -31,6 +31,7 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 			String id=text.getId().toString();
 			String url=text.getUrl().toString();
 			String neighbor = text.getNeighbors().toString();
+			String title = text.getTitle().toString();
 
 
 			
@@ -40,6 +41,7 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 			json.put("url", url);
 			json.put("word", word);
 			json.put("neighbor", neighbor);
+			json.put("title", title);
 	        context.write(new Text(json.toString()), null);
 
         }
