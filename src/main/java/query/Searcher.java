@@ -140,8 +140,8 @@ public class Searcher {
 			 String url= line.getString(line.fieldIndex("url"));
 			 String word1= line.getString(line.fieldIndex("word_1"));
 			 String word2= line.getString(line.fieldIndex("word_2"));
-
-			 return  new Article(id, pos1, pos2, url, word1, word2);
+			 return null;
+//			 return  new Article(id, pos1, pos2, url, word1, word2);
 		 });
 		 
 		 List<Article> result = articles.collect();
