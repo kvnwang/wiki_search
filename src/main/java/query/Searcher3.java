@@ -83,10 +83,15 @@ public class Searcher3 {
 	// returns the corresponding file for a given string
 	// =========================================================================================
 
+	private static int getHashCode(String word) {
+        int first = word.charAt(0) - 'a';
+        int second = word.charAt(1) - 'a';
+        return Math.abs((first * 26 + second) % 676);
+	}
+	
 	private static String getFileNumber(String s) {
-		String value = "" + s.charAt(0) + s.charAt(1);
+		int hash=getHashCode(s);
 		String name = "output/part-r-00";
-		int hash = value.hashCode() % 676;
 		if (hash < 10) {
 			name += ("00" + hash);
 		} else if (hash < 100) {

@@ -19,7 +19,6 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 	@Override
 	  protected void reduce(Text key, Iterable<WikiWord> values, Context context)  throws IOException, InterruptedException {	
 
-		String keyString=key.toString();
 		JSONObject json=new JSONObject();
 	
 		while (values.iterator().hasNext()) {
@@ -34,8 +33,6 @@ public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 			String title = text.getTitle().toString();
 
 
-			
-			json.put("key", keyString);
 			json.put("id", id);
 			json.put("pos", pos);
 			json.put("url", url);
