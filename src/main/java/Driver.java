@@ -46,7 +46,6 @@ public class Driver {
     
     job.setMapOutputKeyClass(Text.class);
     job.setMapOutputValueClass(WikiWord.class);
-//    job.setOutputFormatClass(SequenceFileOutputFormat.class);
 
     job.setPartitionerClass(WordPartition.class);
     job.waitForCompletion(true);
