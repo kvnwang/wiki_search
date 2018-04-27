@@ -42,6 +42,9 @@ public class Article implements Serializable {
         return this.title;
     }
 
+    public String getContent() {
+    		return this.neighbor;
+    }
 
     public String toString() {
         return this.word+ '\n'+title + '\n' + url + '\n' + neighbor+'\n';

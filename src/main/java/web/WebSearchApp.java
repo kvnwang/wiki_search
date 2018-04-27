@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 @SpringBootApplication
-@ComponentScan("configuration")
+//@ComponentScan("configuration")
 
 public class WebSearchApp {
 

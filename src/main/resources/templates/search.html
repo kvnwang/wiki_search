@@ -1,11 +1,44 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Wikipedia Search</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
 </head>
+<body style="background: #f7fbfd">
 
-<body>
+<div class="jumbotron jumbotron-fluid" style="background: #4285f4; color: white">
+    <div class="container">
+        <h1 class="display-4">Wikipedia Search</h1>
+        <hr/>
+        <form method="get" action="/search">
+            <div class="input-group input-group-lg">
+                <input class="form-control form-control-lg py-2 border-0 border" type="search" name="query" placeholder="Enter your search here">
+                <span class="input-group-append">
+                    <div class="input-group-text bg-white border-0"><i class="fa fa-search"></i></div>
+                </span>
+            </div>
+        </form>
+        <hr class="my-4">
+        <p class="lead">Example query: "( A AND B ) OR ( C AND D )"a</p>
+    </div>
+</div>
 
+<div class="container">
+    <div class="list-group" style="padding-bottom: 50px">
+        <a th:each="result : ${results}" th:href="${result.getUrl()}" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" th:text="${result.getTitle()}"></h5>
+            </div>
+            <p class="mb-1" th:text="${result.getContent()}"></p>
+        </a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
-

@@ -22,9 +22,7 @@ import query.SparkSearch;
 @RequestMapping("/")
 
 public class SearchController {
-
-	 @Autowired
-	 SparkSearch service;
+	
 	
     @RequestMapping(method = RequestMethod.GET)
     public String index() {
@@ -33,6 +31,7 @@ public class SearchController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String Search(@RequestParam("term") String query, Model model) {
+		SparkSearch service=new SparkSearch();
 		List<Article> results = service.search(query);
         model.addAttribute("results", results);
         return "search";
