@@ -1,6 +1,6 @@
 package query;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.spark.SparkConf;
@@ -29,8 +29,8 @@ public class SparkSearch {
     private static JavaSparkContext spark = new JavaSparkContext(conf);
 
 	public SparkSearch() {}
-	
-	
+
+
 	public List<Article> search(String query) {
 		if(query.length()<3) {
 			return new ArrayList<Article>();
@@ -39,9 +39,9 @@ public class SparkSearch {
 			ArrayList<String> searchTermList= parser.convert(query);
 		    List<Article> result = applyOperations1(searchTermList);
 		    System.out.println(result);
-		    return result;	
+		    return result;
 		}
-		
+
     }
 
 
@@ -60,7 +60,7 @@ private static int getHashCode(String word) {
 
 private static String getFileNumber(String s) {
 	int hash=getHashCode(s);
-	String name = "output/part-r-00";
+	String name = "hdfs:/user/cs132g3/Wiki_Search_Engine/output/part-r-00";
 	if (hash < 10) return name += ("00" + hash);
 	if (hash < 100) return name += ("0" + hash);
 	else return name += ("" + hash);
