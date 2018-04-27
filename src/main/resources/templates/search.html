@@ -11,23 +11,23 @@
 
 <div class="jumbotron jumbotron-fluid" style="background: #4285f4; color: white">
     <div class="container">
-        <h1 class="display-4">Wikipedia Search</h1>
-        <hr/>
+        <h1 class="text-center">Wikipedia Search</h1>
+        <p class="lead text-center" >Processing Conjunctive Normal Form Queries</p>
+
         <form method="get" action="/search">
-            <div class="input-group input-group-lg">
-                <input class="form-control form-control-lg py-2 border-0 border" type="search" name="query" placeholder="Enter your search here">
-                <span class="input-group-append">
-                    <div class="input-group-text bg-white border-0"><i class="fa fa-search"></i></div>
-                </span>
+            <div class="input-group input-group-med">
+                <input class="form-control form-control-lg py-2 border-0 border" type="search" name="term" placeholder="Enter Your Query">
             </div>
+            <br>
         </form>
-        <hr class="my-4">
-        <p class="lead">Example query: "( A AND B ) OR ( C AND D )"a</p>
+        <p class="lead text-center" >Supports AND/OR/NOT Boolean Operators in Conjunctive Normal Form </p>
     </div>
 </div>
 
 <div class="container">
     <div class="list-group" style="padding-bottom: 50px">
+    Results: 
+        <h2 class="mb-1" th:text="${results.size()}" + "Results"></h2> 
         <a th:each="result : ${results}" th:href="${result.getUrl()}" target="_blank" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1" th:text="${result.getTitle()}"></h5>

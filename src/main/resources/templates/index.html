@@ -1,14 +1,37 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Wikipedia Search</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
 
-<form class="example" action="search">
-  <input type="text" placeholder="Search.." name="term">
-  <button type="submit">Search</button>
-</form>
+
+
+<div class="jumbotron jumbotron-fluid" style="background: #4285f4; color: white">
+    <div class="container">
+        <h1 class="text-center">Wikipedia Search</h1>
+        <p class="lead text-center" >Processing Conjunctive Normal Form Queries</p>
+
+        <form method="get" action="/search">
+
+            <div class="input-group input-group-med">
+                <input class="form-control form-control-lg py-2 border-0 border" type="search" name="term" placeholder="Enter Your Query">
+            </div>
+            <br>
+
+        </form>
+        <p class="lead text-center" >Supports AND/OR/NOT Boolean Operators in Conjunctive Normal Form </p>
+        <p class="lead text-center" >Example Query 1: ( dog AND cat ) OR ( vanilla AND chocolate )</p>
+        <p class="lead text-center" >Example Query 2: ( vanilla AND chocolate ) </p>
+        <p class="lead text-center" >Example Query 3: ( vanilla NOT strawberry ) </p>
+
+    </div>
+</div>
+
+
 </body>
 </html>
