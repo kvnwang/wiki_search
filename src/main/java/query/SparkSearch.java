@@ -1,5 +1,6 @@
 package query;
 
+import java.io.IOException; 
 import java.util.*;
 
 import org.apache.spark.SparkConf;
@@ -11,13 +12,14 @@ import models.Article;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-@ComponentScan("configuration")
-@Service
+
+
+//@ComponentScan("configuration")
+
 public class SparkSearch {
 //    @Autowired
-//    JavaSparkContext static spark;
+//    JavaSparkContext spark;
 
-	private static HashSet<String> operatorTerms = new HashSet<String>();
     private static SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
     private static JavaSparkContext spark = new JavaSparkContext(conf);
 
@@ -156,5 +158,15 @@ public class SparkSearch {
 		}
 		return new ArrayList<Article>();
 	}
+	
+	 private void stop() {
+		  spark.stop();
+	 }
+	
+//	  public static void main(String[] args) throws IOException, InterruptedException {
+//	        SparkSearch searcher = new SparkSearch();
+//	        searcher.search(args[0]);
+//	        searcher.stop();
+//	    }
 
 }

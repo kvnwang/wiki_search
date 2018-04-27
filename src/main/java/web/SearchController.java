@@ -18,21 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import query.SparkSearch;
 
 
-@Controller("/")
-@ComponentScan("query")
+@Controller
+@RequestMapping("/")
 
 public class SearchController {
-    @Autowired
-    SparkSearch service;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+	 @Autowired
+	 SparkSearch service;
+	
+    @RequestMapping(method = RequestMethod.GET)
     public String index() {
         return "index";
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String Search(@RequestParam("term") String query, Model model) {
-        List<Article> results = service.search(query);
+		List<Article> results = service.search(query);
         model.addAttribute("results", results);
         return "search";
 

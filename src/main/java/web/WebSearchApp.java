@@ -8,14 +8,11 @@ import org.springframework.stereotype.Component;
 
 
 @SpringBootApplication
-@ComponentScan("query")
-@ComponentScan("models")
 @ComponentScan("configuration")
 
 public class WebSearchApp {
 
 	public static void main(String[] args) {
-
         SpringApplication.run(WebSearchApp.class, args);
     }
 

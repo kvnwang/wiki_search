@@ -26,11 +26,22 @@
         </license>
     </licenses>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1.RELEASE</version>
-    </parent>
+   
+   <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.0.1.RELEASE</version>
+      <exclusions>
+         <exclusion>
+            <artifactId>logback-classic</artifactId>
+            <groupId>ch.qos.logback</groupId>
+         </exclusion>
+         <exclusion>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <groupId>org.slf4j</groupId>
+         </exclusion>
+      </exclusions>
+   </parent>
 
     <dependencies>
         <dependency>
@@ -131,6 +142,10 @@
             <artifactId>commons-compiler</artifactId>
             <version>3.0.8</version>
         </dependency>
+        <dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
 
 
 
