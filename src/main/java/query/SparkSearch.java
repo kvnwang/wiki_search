@@ -1,30 +1,29 @@
 package query;
 
-import java.io.IOException;
 import java.util.*;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.PairFunction;
 
-import com.google.common.collect.Iterables;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import models.Article;
-import scala.Tuple2;
-
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+@ComponentScan("configuration")
+@Service
 public class SparkSearch {
+//    @Autowired
+//    JavaSparkContext static spark;
 
 	private static HashSet<String> operatorTerms = new HashSet<String>();
     private static SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
     private static JavaSparkContext spark = new JavaSparkContext(conf);
 
-	public SparkSearch() {
-
-	}
+	public SparkSearch() {}
+	
+	
 	public List<Article> search(String query) {
         QueryParser parser=new QueryParser();
         ArrayList<String> searchTermList= parser.convert(query);

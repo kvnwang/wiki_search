@@ -2,20 +2,19 @@ package query;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
+
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
+import org.tartarus.snowball.ext.PorterStemmer;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import models.Article;
 
+import models.Article;
 import scala.Tuple2;
 
 public class Searcher3 {
@@ -23,6 +22,7 @@ public class Searcher3 {
 
 	static SparkConf conf = new SparkConf().setAppName("Simple Application").setMaster("local[*]");
 	static JavaSparkContext spark = new JavaSparkContext(conf);
+	static PorterStemmer stemmer = new PorterStemmer();
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		Scanner input = new Scanner(System.in);
@@ -112,7 +112,8 @@ public class Searcher3 {
 				.filter(line -> {
 					JsonObject json = (JsonObject) new JsonParser().parse(line);
 					String word = json.get("word").getAsString();
-                    return output.contains(word) && !isOperand(word);
+
+				    return output.contains(word) && !isOperand(word);
                 })
                 .map(filter -> {
                     JsonObject json = (JsonObject) new JsonParser().parse(filter);
@@ -165,6 +166,9 @@ public class Searcher3 {
                     current=left;
 
                 } else if(s.equals("NOT")) {
+                	System.out.println(left);
+                	System.out.println(right);
+
                     left.removeAll(right);
                     current=left;
                 }
@@ -175,6 +179,9 @@ public class Searcher3 {
 
             } else {
                 Set<Article> curr = allArticles.get(s);
+                if(curr==null) {
+                	curr=new HashSet<Article>();
+                }
                 stck.push(curr);
                 if(size-1==i) return new ArrayList<Article>(stck.pop());
 

@@ -6,7 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+
 @SpringBootApplication
+@ComponentScan("query")
+@ComponentScan("models")
+@ComponentScan("configuration")
+
 public class WebSearchApp {
 
 	public static void main(String[] args) {

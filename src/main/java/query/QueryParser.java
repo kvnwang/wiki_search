@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Stack;
 
+import org.tartarus.snowball.ext.PorterStemmer;
+
 public class QueryParser {
     public static HashSet<String> operatorTerms = new HashSet<String>();
+	public PorterStemmer stemmer = new PorterStemmer();
 
     public QueryParser () {
         initHash();
@@ -30,7 +33,11 @@ public class QueryParser {
         Stack<String> operators = new Stack<String>();
         ArrayList<String> output = new ArrayList<String>();
         int i = 0;
-        for (String s : tempArray) {
+        for (String str : tempArray) {
+			stemmer.setCurrent(str);
+		    stemmer.stem();
+		    String s=stemmer.getCurrent().trim();
+		    
             if (s.equals("(")) {
                 workingStack.push(s);
             } else if (s.equals(")")) {
