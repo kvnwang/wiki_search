@@ -32,12 +32,16 @@ public class SparkSearch {
 	
 	
 	public List<Article> search(String query) {
-		QueryParser parser=new QueryParser();
-
-		ArrayList<String> searchTermList= parser.convert(query);
-	    List<Article> result = applyOperations1(searchTermList);
-	    System.out.println(result);
-	    return result;
+		if(query.length()<3) {
+			return new ArrayList<Article>();
+		} else {
+			QueryParser parser=new QueryParser();
+			ArrayList<String> searchTermList= parser.convert(query);
+		    List<Article> result = applyOperations1(searchTermList);
+		    System.out.println(result);
+		    return result;	
+		}
+		
     }
 
 
