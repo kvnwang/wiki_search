@@ -16,9 +16,11 @@ Final Project for COSI 132: Parallel and distributed querying system over large 
 ## Project Overview 
 This is a web search interface that allows users to search through KBs of Wikipedia data. This project uses Hadoop MapReduce to index all wikipedia articles found in wikipedia .csv files with information of each word, article id, url, and document position. The MapReduce outputs json string structures to genrate the inverted index for each word. After using MapReduce to index all the articles, Spark and Spring Boot are used to search through all indexed articles on HDFS or locally to ouptput all articles and text snippets of queried words in conjunctive normal form. 
 
-## Getting Started
+## Getting Started Locally
 + Run Hadoop MapReduce job
-  + Run Driver.java class to index wikipedia .csv files
+  + Run Driver.java class to index wikipedia .csv files for the MapReduce job
+  + Run mvn clean install, then yarn jar app.jar 
 + Run Spark and Spring Web Interface 
-  + Run 'mvn clean install', then run java -jar {app_name}.jar
-  + The application should be running on port number 8003.
+  + Run 'mvn clean install'
+  + Run run java -jar {app_name}.jar
+  + The application should be running on port number 8000
