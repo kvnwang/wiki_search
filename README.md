@@ -1,17 +1,20 @@
 # Wiki Search Engine
 
-# Group 3 (cs132g3) - Hadooplahoops
+# Group Information
+  + Group 3 
+  + Team Name - Hadooplahoops
+
 ## Overview
 Final Project for COSI 132: Parallel and distributed querying system over large Wikipedia Datasets
 ## Authors:
-- Kevin Wang, Anthony Liu, Geoffrey Kao, Christine Zhu
++ Kevin Wang, Anthony Liu, Geoffrey Kao, Christine Zhu
 
 ## Implementation and Technologies:
-- Java
-- MapReduce
-- Hadoop
-- Spark
-- Spring Boot
++ Java
++ MapReduce
++ Hadoop
++ Spark
++ Spring Boot
 
 ## Project Overview 
 This is a web search interface that allows users to search through KBs of Wikipedia data. This project uses Hadoop MapReduce to index all wikipedia articles found in wikipedia .csv files with information of each word, article id, url, and document position. The MapReduce outputs json string structures to genrate the inverted index for each word. After using MapReduce to index all the articles, Spark and Spring Boot are used to search through all indexed articles on HDFS or locally to ouptput all articles and text snippets of queried words in conjunctive normal form. 
