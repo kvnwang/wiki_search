@@ -6,10 +6,11 @@
 
 ## Overview
 Final Project for COSI 132: Parallel and distributed querying system over large Wikipedia Datasets
-## Authors:
+
+## Authors
 + Kevin Wang, Anthony Liu, Geoffrey Kao, Christine Zhu
 
-## Implementation and Technologies:
+## Implementation and Technologies
 + Java
 + MapReduce
 + Hadoop
