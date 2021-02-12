@@ -1,6 +1,5 @@
 package query;
 
-import java.io.IOException;
 import java.util.*;
 
 import org.apache.spark.SparkConf;
@@ -11,12 +10,8 @@ import org.apache.spark.api.java.function.PairFunction;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import models.Article;
-import scala.Tuple2;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import scala.Tuple2;
 
 
 //@ComponentScan("configuration")

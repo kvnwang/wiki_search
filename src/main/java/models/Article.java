@@ -1,6 +1,4 @@
 package models;
-import wordwrapper.WikiWord;
-
 import java.io.Serializable;
 
 public class Article implements Serializable {

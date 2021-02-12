@@ -1,18 +1,12 @@
 package mapreduce;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import wordwrapper.WikiWord;
 
 public class IndexReducer extends Reducer<Text,WikiWord,Text,NullWritable> {
 

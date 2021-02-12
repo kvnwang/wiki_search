@@ -14,8 +14,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.tartarus.snowball.ext.PorterStemmer;
 
-import wordwrapper.WikiWord;
-
 public class IndexMapper extends Mapper< LongWritable, Text, Text, WikiWord> {
 	private Set<String> stopWords = (Set<String>) EnglishAnalyzer.getDefaultStopSet();
 	 private final static PorterStemmer stemmer = new PorterStemmer();

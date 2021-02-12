@@ -6,14 +6,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
-@SpringBootApplication
+	@SpringBootApplication
 //@ComponentScan("configuration")
 
 
 public class WebSearchApp {
 
 	public static void main(String[] args) {
-        SpringApplication.run(WebSearchApp.class, args);
+
+		SpringApplication springApplication = new SpringApplication();
+
+		springApplication.setWebEnvironment(false);
+
+			//springApplication.run(WebSearchargs);
+
+      springApplication.run(WebSearchApp.class, args);
     }
 
 

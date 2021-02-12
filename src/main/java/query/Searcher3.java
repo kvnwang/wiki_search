@@ -1,8 +1,7 @@
 package query;
 
-import java.io.IOException; 
+import java.io.IOException;
 import java.util.*;
-
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -14,7 +13,6 @@ import org.tartarus.snowball.ext.PorterStemmer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import models.Article;
 import scala.Tuple2;
 
 public class Searcher3 {
